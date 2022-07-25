@@ -7,7 +7,7 @@
 class profile_jenkins (
   Boolean $use_security,
   String $auth_strategy,
-  Optional[Hash[Hash]] $auth_matrix_permissions,
+  Optional[Array[Hash]] $auth_matrix_permissions,
   String $security_realm_class,
   Optional[String] $security_realm_plugin,
   Hash $security_realm_settings,

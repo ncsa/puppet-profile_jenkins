@@ -6,7 +6,7 @@
   <mode>NORMAL</mode>
   <useSecurity><%= $profile_jenkins::use_security %></useSecurity>
   <authorizationStrategy class="<%= $profile_jenkins::auth_strategy %>">
-    <% $profile_jenkins::auth_matrix_permissions.each |String $rule, Hash $rule_hash| { -%>
+    <% $profile_jenkins::auth_matrix_permissions.each |Hash $rule_hash| { -%>
       <permission><%= $rule_hash['type'] %>:<%= $rule_hash['action'] %>:<%= $rule_hash['entity_name'] %></permission>
     <% } -%>
   </authorizationStrategy>
