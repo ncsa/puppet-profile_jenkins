@@ -1,9 +1,31 @@
-# @summary A short summary of the purpose of this class
+# @summary Install and configures Jenkins
 #
-# A description of what this class does
+# @author Yan Zhan
 #
 # @example
 #   include profile_jenkins
+#
+# @param use_security
+#   Enable security for Jenkins
+#
+# @param auth_strategy
+#   Class name of the authorization strategy to use
+#
+# @param auth_matrix_permissions
+#   (optional) If matrix-based authorization is used, provide a list of rules. Each rule
+#   hash consists of type (GROUP or USER), action (class name of the Jenkins action), and
+#   entity_name (the name of the group or user)
+#
+# @param security_realm_class
+#   Class name of the security realm to use
+#
+# @param security_realm_plugin
+#   (optional) If using a security realm provided by a plugin, provide the name of the
+#   plugin
+#
+# @param security_realm_settings
+#   Settings for the selected security realm
+#
 class profile_jenkins (
   Boolean $use_security,
   String $auth_strategy,
