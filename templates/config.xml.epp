@@ -6,35 +6,9 @@
   <mode>NORMAL</mode>
   <useSecurity><%= $profile_jenkins::use_security %></useSecurity>
   <authorizationStrategy class="<%= $profile_jenkins::auth_strategy %>">
-    <permission>GROUP:com.cloudbees.plugins.credentials.CredentialsProvider.Create:delta_admin</permission>
-    <permission>GROUP:com.cloudbees.plugins.credentials.CredentialsProvider.Delete:delta_admin</permission>
-    <permission>GROUP:com.cloudbees.plugins.credentials.CredentialsProvider.ManageDomains:delta_admin</permission>
-    <permission>GROUP:com.cloudbees.plugins.credentials.CredentialsProvider.Update:delta_admin</permission>
-    <permission>GROUP:com.cloudbees.plugins.credentials.CredentialsProvider.View:delta_admin</permission>
-    <permission>GROUP:hudson.model.Computer.Build:delta_admin</permission>
-    <permission>GROUP:hudson.model.Computer.Configure:delta_admin</permission>
-    <permission>GROUP:hudson.model.Computer.Connect:delta_admin</permission>
-    <permission>GROUP:hudson.model.Computer.Create:delta_admin</permission>
-    <permission>GROUP:hudson.model.Computer.Delete:delta_admin</permission>
-    <permission>GROUP:hudson.model.Computer.Disconnect:delta_admin</permission>
-    <permission>GROUP:hudson.model.Hudson.Administer:delta_admin</permission>
-    <permission>GROUP:hudson.model.Hudson.Read:delta_admin</permission>
-    <permission>GROUP:hudson.model.Item.Build:delta_admin</permission>
-    <permission>GROUP:hudson.model.Item.Cancel:delta_admin</permission>
-    <permission>GROUP:hudson.model.Item.Configure:delta_admin</permission>
-    <permission>GROUP:hudson.model.Item.Create:delta_admin</permission>
-    <permission>GROUP:hudson.model.Item.Delete:delta_admin</permission>
-    <permission>GROUP:hudson.model.Item.Discover:delta_admin</permission>
-    <permission>GROUP:hudson.model.Item.Read:delta_admin</permission>
-    <permission>GROUP:hudson.model.Item.Workspace:delta_admin</permission>
-    <permission>GROUP:hudson.model.View.Configure:authenticated</permission>
-    <permission>GROUP:hudson.model.View.Configure:delta_admin</permission>
-    <permission>GROUP:hudson.model.View.Create:authenticated</permission>
-    <permission>GROUP:hudson.model.View.Create:delta_admin</permission>
-    <permission>GROUP:hudson.model.View.Delete:authenticated</permission>
-    <permission>GROUP:hudson.model.View.Delete:delta_admin</permission>
-    <permission>GROUP:hudson.model.View.Read:authenticated</permission>
-    <permission>GROUP:hudson.model.View.Read:delta_admin</permission>
+    <% $profile_jenkins::auth_matrix_permissions.each |String $rule, Hash $rule_hash| { -%>
+      <permission><%= $rule_hash['type'] %>:<%= $rule_hash['action'] %>:<%= $rule_hash['entity_name'] %></permission>
+    <% } -%>
   </authorizationStrategy>
   <securityRealm class="<%= $profile_jenkins::security_realm_class %>" <% if $profile_jenkins::security_realm_plugin { -%> plugin="<%= $profile_jenkins::security_realm_plugin %>"<% } -%>>
     <% $profile_jenkins::security_realm_settings.each |$key, $value| { -%>
