@@ -4,7 +4,14 @@
 #
 # @example
 #   include profile_jenkins
-class profile_jenkins {
+class profile_jenkins (
+  String $server,
+  Boolean $use_security,
+  String $auth_strategy,
+  String $security_realm_class,
+  String $security_realm_plugin,
+  Hash $security_realm_settings,
+){
 
   include ::java
   include ::jenkins

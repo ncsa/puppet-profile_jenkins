@@ -36,7 +36,7 @@
     <permission>GROUP:hudson.model.View.Read:authenticated</permission>
     <permission>GROUP:hudson.model.View.Read:delta_admin</permission>
   </authorizationStrategy>
-  <securityRealm class="<%= $profile_jenkins::security_realm %>" <% if $profile_jenkins::security_realm_plugin { -%>
+  <securityRealm class="<%= $profile_jenkins::security_realm_class %>" <% if $profile_jenkins::security_realm_plugin { -%>
     plugin="<%= $profile_jenkins::security_realm_plugin %>"
   <% } -%>>
     <% $profile_jenkins::security_realm_settings.each |$key, $value| { %>
