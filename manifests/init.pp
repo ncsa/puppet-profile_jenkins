@@ -5,7 +5,6 @@
 # @example
 #   include profile_jenkins
 class profile_jenkins (
-  String $server,
   Boolean $use_security,
   String $auth_strategy,
   String $security_realm_class,
