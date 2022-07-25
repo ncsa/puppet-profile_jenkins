@@ -1,0 +1,74 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<hudson>
+  <disabledAdministrativeMonitors/>
+  <version>2.346.2</version>
+  <numExecutors>2</numExecutors>
+  <mode>NORMAL</mode>
+  <useSecurity><%= $profile_jenkins::use_security %></useSecurity>
+  <authorizationStrategy class="<%= $profile_jenkins::auth_strategy %>">
+    <permission>GROUP:com.cloudbees.plugins.credentials.CredentialsProvider.Create:delta_admin</permission>
+    <permission>GROUP:com.cloudbees.plugins.credentials.CredentialsProvider.Delete:delta_admin</permission>
+    <permission>GROUP:com.cloudbees.plugins.credentials.CredentialsProvider.ManageDomains:delta_admin</permission>
+    <permission>GROUP:com.cloudbees.plugins.credentials.CredentialsProvider.Update:delta_admin</permission>
+    <permission>GROUP:com.cloudbees.plugins.credentials.CredentialsProvider.View:delta_admin</permission>
+    <permission>GROUP:hudson.model.Computer.Build:delta_admin</permission>
+    <permission>GROUP:hudson.model.Computer.Configure:delta_admin</permission>
+    <permission>GROUP:hudson.model.Computer.Connect:delta_admin</permission>
+    <permission>GROUP:hudson.model.Computer.Create:delta_admin</permission>
+    <permission>GROUP:hudson.model.Computer.Delete:delta_admin</permission>
+    <permission>GROUP:hudson.model.Computer.Disconnect:delta_admin</permission>
+    <permission>GROUP:hudson.model.Hudson.Administer:delta_admin</permission>
+    <permission>GROUP:hudson.model.Hudson.Read:delta_admin</permission>
+    <permission>GROUP:hudson.model.Item.Build:delta_admin</permission>
+    <permission>GROUP:hudson.model.Item.Cancel:delta_admin</permission>
+    <permission>GROUP:hudson.model.Item.Configure:delta_admin</permission>
+    <permission>GROUP:hudson.model.Item.Create:delta_admin</permission>
+    <permission>GROUP:hudson.model.Item.Delete:delta_admin</permission>
+    <permission>GROUP:hudson.model.Item.Discover:delta_admin</permission>
+    <permission>GROUP:hudson.model.Item.Read:delta_admin</permission>
+    <permission>GROUP:hudson.model.Item.Workspace:delta_admin</permission>
+    <permission>GROUP:hudson.model.View.Configure:authenticated</permission>
+    <permission>GROUP:hudson.model.View.Configure:delta_admin</permission>
+    <permission>GROUP:hudson.model.View.Create:authenticated</permission>
+    <permission>GROUP:hudson.model.View.Create:delta_admin</permission>
+    <permission>GROUP:hudson.model.View.Delete:authenticated</permission>
+    <permission>GROUP:hudson.model.View.Delete:delta_admin</permission>
+    <permission>GROUP:hudson.model.View.Read:authenticated</permission>
+    <permission>GROUP:hudson.model.View.Read:delta_admin</permission>
+  </authorizationStrategy>
+  <securityRealm class="<%= $profile_jenkins::security_realm %>" <% if $profile_jenkins::security_realm_plugin { -%>
+    plugin="<%= $profile_jenkins::security_realm_plugin %>"
+  <% } -%>>
+    <% $profile_jenkins::security_realm_settings.each |$key, $value| { %>
+      <<%= $key %>><%= $value %></<%= $key %>>
+    <% } -%>
+  </securityRealm>
+  <disableRememberMe>false</disableRememberMe>
+  <projectNamingStrategy class="jenkins.model.ProjectNamingStrategy$DefaultProjectNamingStrategy"/>
+  <workspaceDir>${ITEM_ROOTDIR}/workspace</workspaceDir>
+  <buildsDir>${ITEM_ROOTDIR}/builds</buildsDir>
+  <markupFormatter class="hudson.markup.EscapedMarkupFormatter"/>
+  <jdks/>
+  <viewsTabBar class="hudson.views.DefaultViewsTabBar"/>
+  <myViewsTabBar class="hudson.views.DefaultMyViewsTabBar"/>
+  <clouds/>
+  <scmCheckoutRetryCount>0</scmCheckoutRetryCount>
+  <views>
+    <hudson.model.AllView>
+      <owner class="hudson" reference="../../.."/>
+      <name>all</name>
+      <filterExecutors>false</filterExecutors>
+      <filterQueue>false</filterQueue>
+      <properties class="hudson.model.View$PropertyList"/>
+    </hudson.model.AllView>
+  </views>
+  <primaryView>all</primaryView>
+  <slaveAgentPort>0</slaveAgentPort>
+  <label></label>
+  <crumbIssuer class="hudson.security.csrf.DefaultCrumbIssuer">
+    <excludeClientIPFromCrumb>false</excludeClientIPFromCrumb>
+  </crumbIssuer>
+  <nodeProperties/>
+  <globalNodeProperties/>
+  <nodeRenameMigrationNeeded>false</nodeRenameMigrationNeeded>
+</hudson>

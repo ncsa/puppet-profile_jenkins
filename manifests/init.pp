@@ -26,4 +26,13 @@ class profile_jenkins {
     }
   }
 
+  file '/var/lib/jenkins/config.xml' {
+    ensure => file,
+    content => epp('profile_jenkins/config.xml.epp'),
+    owner => 'jenkins',
+    group => 'jenkins',
+    mode => '0644',
+    require => Package['jenkins'],
+  }
+
 }
