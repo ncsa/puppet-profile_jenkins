@@ -40,20 +40,20 @@ class profile_jenkins (
   include ::apache::mod::auth_openidc
 
   # Enable and install module stream on RHEL 8.x
-  if $facts['os']['family'] == 'RedHat' and $facts['os']['release']['major'] == '8' {
-    package { 'mod_auth_openidc-module':
-      name => 'mod_auth_openidc',
-      ensure => present,
-      enable_only => true,
-      provider => dnfmodule,
-    }
+#  if $facts['os']['family'] == 'RedHat' and $facts['os']['release']['major'] == '8' {
+#    package { 'mod_auth_openidc-module':
+#      name => 'mod_auth_openidc',
+#      ensure => present,
+#      enable_only => true,
+#      provider => dnfmodule,
+#    }
 
-    package { 'mod_auth_openidc':
-      ensure => installed,
-      provider => dnf,
-      require => Package['mod_auth_openidc-module'],
-    }
-  }
+#    package { 'mod_auth_openidc':
+#      ensure => installed,
+#      provider => dnf,
+#      require => Package['mod_auth_openidc-module'],
+#    }
+#  }
 
   file { '/var/lib/jenkins/config.xml':
     ensure => file,
