@@ -51,7 +51,7 @@ class profile_jenkins (
     changes => "set hudson/authorizationStrategy/#attribute/class ${auth_strategy_class}",
   }
 
-  $auth_matrix_permissions.each_with_index |Hash $rule_hash, Integer $index| {
+  $auth_matrix_permissions.each |Integer $index, Hash $rule_hash| {
     augeas { "Jenkins/authMatrixPermission-${index}":
       incl => "/var/lib/jenkins/config.xml",
       lens => "Xml.lns",
