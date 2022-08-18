@@ -43,12 +43,14 @@ class profile_jenkins (
     incl => "/var/lib/jenkins/config.xml",
     lens => "Xml.lns",
     changes => "set hudson/useSecurity/#text ${use_security}",
+    notify => Service['jenkins'],
   }
 
   augeas { 'Jenkins/authStrategy':
     incl => "/var/lib/jenkins/config.xml",
     lens => "Xml.lns",
     changes => "set hudson/authorizationStrategy/#attribute/class ${auth_strategy_class}",
+    notify => Service['jenkins'],
   }
 
   $auth_matrix_permissions.each |Numeric $index, Hash $rule_hash| {
@@ -56,6 +58,7 @@ class profile_jenkins (
       incl => "/var/lib/jenkins/config.xml",
       lens => "Xml.lns",
       changes => "set hudson/authorizationStrategy/permission[${$index+1}]/#text ${rule_hash['type']}:${rule_hash['action']}:${rule_hash['entity_name']}"
+      notify => Service['jenkins'],
     }
   }
 
@@ -63,12 +66,14 @@ class profile_jenkins (
     incl => "/var/lib/jenkins/config.xml",
     lens => "Xml.lns",
     changes => "set hudson/securityRealm/#attribute/class ${security_realm_class}",
+    notify => Service['jenkins'],
   }
 
   augeas { 'Jenkins/securityRealmPlugin':
     incl => "/var/lib/jenkins/config.xml",
     lens => "Xml.lns",
     changes => "set hudson/securityRealm/#attribute/plugin ${security_realm_plugin}",
+    notify => Service['jenkins'],
   }
 
   $security_realm_settings.each |$key, $value| {
@@ -76,6 +81,7 @@ class profile_jenkins (
       incl => "/var/lib/jenkins/config.xml",
       lens => "Xml.lns",
       changes => "set hudson/securityRealm/${key}/#text ${value}"
+      notify => Service['jenkins'],
     }
   }
 
