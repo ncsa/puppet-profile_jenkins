@@ -52,10 +52,10 @@ class profile_jenkins (
   }
 
   $auth_matrix_permissions.each |Integer $index, Hash $rule_hash| {
-    augeas { "Jenkins/authMatrixPermission-${index}":
+    augeas { "Jenkins/authMatrixPermission-${index+1}":
       incl => "/var/lib/jenkins/config.xml",
       lens => "Xml.lns",
-      changes => "set hudson/authorizationStrategy/permission[${index}]/#text ${rule_hash['type']}:${rule_hash['action']}:${rule_hash['entity_name']}"
+      changes => "set hudson/authorizationStrategy/permission[${index+1}]/#text ${rule_hash['type']}:${rule_hash['action']}:${rule_hash['entity_name']}"
     }
   }
 
