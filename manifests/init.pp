@@ -39,6 +39,11 @@ class profile_jenkins (
   include ::jenkins
   include ::apache::mod::auth_openidc
 
+  user { "jenkins":
+    ensure => present,
+    shell => "/sbin/nologin",
+  }
+
   augeas { 'Jenkins/useSecurity':
     incl => "/var/lib/jenkins/config.xml",
     lens => "Xml.lns",
