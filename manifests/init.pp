@@ -37,9 +37,7 @@ class profile_jenkins (
 
   include java
   include apache::mod::auth_openidc
-  class {'jenkins':
-    manage_user => false,
-  }
+  include jenkins
 
   augeas { 'Jenkins/useSecurity':
     incl => "/var/lib/jenkins/config.xml",
