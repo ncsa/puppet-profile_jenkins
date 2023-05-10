@@ -36,14 +36,10 @@ class profile_jenkins (
 ){
 
   include java
-  include jenkins
   include apache::mod::auth_openidc
-#  include ::apache::mod::proxy
-
-#  user { "jenkins":
-#    ensure => present,
-#    shell => "/sbin/nologin",
-#  }
+  class {'jenkins':
+    manage_user => false,
+  }
 
   augeas { 'Jenkins/useSecurity':
     incl => "/var/lib/jenkins/config.xml",
