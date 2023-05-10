@@ -35,9 +35,9 @@ class profile_jenkins (
   Hash $security_realm_settings,
 ){
 
-  include ::java
-  include ::jenkins
-  include ::apache::mod::auth_openidc
+  include java
+  include jenkins
+  include apache::mod::auth_openidc
 #  include ::apache::mod::proxy
 
 #  user { "jenkins":
@@ -90,5 +90,14 @@ class profile_jenkins (
       notify => Service['jenkins'],
     }
   }
+
+  ensure_resource('user', $jenkins::user, {
+    ensure => present,
+    gid => $jenkins::group,
+    home => $jenkins::localstatedir,
+    shell => "/sbin/nologin",
+    managehome => false,
+    system => true,
+  })
 
 }
