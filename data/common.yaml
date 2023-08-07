@@ -1,1 +1,3 @@
 --- {}
+profile_jenkins::backup::locations:
+  - "/var/lib/jenkins"
