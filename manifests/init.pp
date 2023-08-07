@@ -27,71 +27,73 @@
 #   Settings for the selected security realm
 #
 class profile_jenkins (
+
   Boolean $use_security,
   String $auth_strategy_class,
   Optional[Array[Hash]] $auth_matrix_permissions,
   String $security_realm_class,
   Optional[String] $security_realm_plugin,
   Hash $security_realm_settings,
-){
 
+) {
   include java
   include apache::mod::auth_openidc
   include jenkins
 
   augeas { 'Jenkins/useSecurity':
-    incl => "/var/lib/jenkins/config.xml",
-    lens => "Xml.lns",
+    incl    => '/var/lib/jenkins/config.xml',
+    lens    => 'Xml.lns',
     changes => "set hudson/useSecurity/#text ${use_security}",
-    notify => Service['jenkins'],
+    notify  => Service['jenkins'],
   }
 
   augeas { 'Jenkins/authStrategy':
-    incl => "/var/lib/jenkins/config.xml",
-    lens => "Xml.lns",
+    incl    => '/var/lib/jenkins/config.xml',
+    lens    => 'Xml.lns',
     changes => "set hudson/authorizationStrategy/#attribute/class ${auth_strategy_class}",
-    notify => Service['jenkins'],
+    notify  => Service['jenkins'],
   }
 
   $auth_matrix_permissions.each |Numeric $index, Hash $rule_hash| {
     augeas { "Jenkins/authMatrixPermission-${$index+1}":
-      incl => "/var/lib/jenkins/config.xml",
-      lens => "Xml.lns",
-      changes => "set hudson/authorizationStrategy/permission[${$index+1}]/#text ${rule_hash['type']}:${rule_hash['action']}:${rule_hash['entity_name']}",
-      notify => Service['jenkins'],
+      incl    => '/var/lib/jenkins/config.xml',
+      lens    => 'Xml.lns',
+      changes => "set hudson/authorizationStrategy/permission[${$index+1}]/\
+        #text ${rule_hash['type']}:${rule_hash['action']}:${rule_hash['entity_name']}",
+      notify  => Service['jenkins'],
     }
   }
 
   augeas { 'Jenkins/securityRealm':
-    incl => "/var/lib/jenkins/config.xml",
-    lens => "Xml.lns",
+    incl    => '/var/lib/jenkins/config.xml',
+    lens    => 'Xml.lns',
     changes => "set hudson/securityRealm/#attribute/class ${security_realm_class}",
-    notify => Service['jenkins'],
+    notify  => Service['jenkins'],
   }
 
   augeas { 'Jenkins/securityRealmPlugin':
-    incl => "/var/lib/jenkins/config.xml",
-    lens => "Xml.lns",
+    incl    => '/var/lib/jenkins/config.xml',
+    lens    => 'Xml.lns',
     changes => "set hudson/securityRealm/#attribute/plugin ${security_realm_plugin}",
-    notify => Service['jenkins'],
+    notify  => Service['jenkins'],
   }
 
   $security_realm_settings.each |$key, $value| {
     augeas { "Jenkins/securityRealmSettings-${key}":
-      incl => "/var/lib/jenkins/config.xml",
-      lens => "Xml.lns",
+      incl    => '/var/lib/jenkins/config.xml',
+      lens    => 'Xml.lns',
       changes => "set hudson/securityRealm/${key}/#text ${value}",
-      notify => Service['jenkins'],
+      notify  => Service['jenkins'],
     }
   }
 
   ensure_resource('user', $jenkins::user, {
-    ensure => present,
-    gid => $jenkins::group,
-    home => $jenkins::localstatedir,
-    shell => "/sbin/nologin",
-    managehome => false,
-    system => true,
-  })
-
+      ensure      => present,
+      gid         => $jenkins::group,
+      home        => $jenkins::localstatedir,
+      shell       => '/sbin/nologin',
+      managehome  => false,
+      system      => true,
+    }
+  )
 }
