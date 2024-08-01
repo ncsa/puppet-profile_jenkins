@@ -1,3 +1,7 @@
 --- {}
+jenkins::manage_user: false
+#jenkins::manage_group: true
+jenkins::manage_datadirs: false
+
 profile_jenkins::backup::locations:
   - "/var/lib/jenkins"

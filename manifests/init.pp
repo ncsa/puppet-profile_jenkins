@@ -96,4 +96,15 @@ class profile_jenkins (
       system      => true,
     }
   )
+
+  $dir_params = {
+    ensure => directory,
+    owner  => $jenkins::user,
+    group  => $jenkins::group,
+    mode   => '0750',
+  }
+  ensure_resource('file', $jenkins::localstatedir, $dir_params)
+  ensure_resource('file', $jenkins::plugin_dir, $dir_params)
+  ensure_resource('file', $jenkins::job_dir, $dir_params)
+
 }
