@@ -54,12 +54,15 @@ class profile_jenkins (
     notify  => Service['jenkins'],
   }
 
-  $auth_matrix_permissions.each |Numeric $index, Hash $rule_hash| {
-    augeas { "Jenkins/authMatrixPermission-${$index+1}":
+  $auth_matrix_permissions.each |Hash $rule_hash| {
+    $permission_string = "${rule_hash['type']}:${rule_hash['action']}:${rule_hash['entity_name']}"
+
+    augeas { "Jenkins/authMatrixPermission-${permission_string}":
       incl    => '/var/lib/jenkins/config.xml',
       lens    => 'Xml.lns',
-      changes => "set hudson/authorizationStrategy/permission[${$index+1}]/#text \
-                  ${rule_hash['type']}:${rule_hash['action']}:${rule_hash['entity_name']}",
+      changes => "set hudson/authorizationStrategy/permission[last()+1]/#text ${permission_string}",
+      onlyif  => "values hudson/authorizationStrategy/permission/#text \
+                  not_include ${permission_string}",
       notify  => Service['jenkins'],
     }
   }
@@ -75,6 +78,7 @@ class profile_jenkins (
     incl    => '/var/lib/jenkins/config.xml',
     lens    => 'Xml.lns',
     changes => "set hudson/securityRealm/#attribute/plugin ${security_realm_plugin}",
+    onlyif  => 'match hudson/securityRealm/#attribute/plugin size == 0',
     notify  => Service['jenkins'],
   }
 
@@ -106,5 +110,4 @@ class profile_jenkins (
   ensure_resource('file', $jenkins::localstatedir, $dir_params)
   ensure_resource('file', $jenkins::plugin_dir, $dir_params)
   ensure_resource('file', $jenkins::job_dir, $dir_params)
-
 }
