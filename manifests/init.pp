@@ -38,6 +38,7 @@ class profile_jenkins (
 ) {
   include java
   include apache::mod::auth_openidc
+  include apache::mod::authnz_ldap
   include jenkins
 
   augeas { 'Jenkins/useSecurity':
