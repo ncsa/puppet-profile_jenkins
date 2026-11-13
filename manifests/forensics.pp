@@ -312,11 +312,18 @@ class profile_jenkins::forensics (
         '',
       ].join("\n")
 
-      file { '/etc/systemd/system/jenkins.service.d':
-        ensure => directory,
-        owner  => 'root',
-        group  => 'root',
-        mode   => '0755',
+      # Do NOT declare /etc/systemd/system/jenkins.service.d here:
+      # systemd::dropin_file, which jenkins::user_setup uses for
+      # puppet-overrides.conf, declares that directory itself, and two
+      # resource-like declarations of one File title always collide whatever
+      # the attributes are. install -d only runs when the directory is absent,
+      # so whichever class compiles first, the other still succeeds (Puppet's
+      # file type does not create missing parents).
+      exec { 'jenkins-forensics-dropin-dir':
+        command => 'install -d -m 0755 -o root -g root /etc/systemd/system/jenkins.service.d',
+        creates => '/etc/systemd/system/jenkins.service.d',
+        path    => ['/usr/bin', '/bin'],
+        before  => File['/etc/systemd/system/jenkins.service.d/zz-forensics.conf'],
       }
 
       file { '/etc/systemd/system/jenkins.service.d/zz-forensics.conf':
